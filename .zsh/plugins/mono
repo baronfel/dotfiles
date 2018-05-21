@@ -1,0 +1,6 @@
+# set this so that dotnet sdk builds pick up mono when building for full-framework
+export FrameworkPathOverride
+FrameworkPathOverride=$(dirname "$(which mono)")/../lib/mono/4.5/
+
+# use this so that we can talk via SSL
+export MONO_TLS_PROVIDER=btls

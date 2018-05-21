@@ -1,0 +1,2 @@
+# set this to avboid downloading the nuget package cache (detection of which is flaky)
+export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1

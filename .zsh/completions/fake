@@ -1,0 +1,31 @@
+#! /bin/zsh
+
+_build_sh()
+{
+    local cur base dir
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    base="${COMP_WORDS[0]}"
+    dir=$(dirname "${base}")
+
+    if [ -e "${dir}/build.fsx" ]; then
+        BUILD_FSX="${dir}/build.fsx"
+    elif [ -e "${dir}/build/build.fsx" ]; then
+        BUILD_FSX="${dir}/build/build.fsx"
+    elif [ -e "${dir}/Build/build.fsx" ]; then
+        BUILD_FSX="${dir}/Build/build.fsx"
+    else
+        BUILD_FSX=$(find "${dir}" -name build.fsx)
+    fi
+
+    if [ -z "${BUILD_FSX}" ]; then
+        COMPREPLY=()
+    else
+        OLDIFS="$IFS"
+        IFS=$'\n'
+        RESULTS=$(grep -o '^Target.create* ".*"' "${BUILD_FSX}" | cut -d'"' -f2)
+        COMPREPLY=($(compgen -W "${RESULTS}" -- "$cur"))
+        IFS="$OLDIFS"
+    fi
+}
+
+complete -F _build_sh build.sh
